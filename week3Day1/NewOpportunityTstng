@@ -1,0 +1,134 @@
+package week3Day1;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class NewOpportunityTstng extends LaunchBrowser {
+	
+	
+	@Test
+	public  void createOpp() throws InterruptedException {
+
+	
+			try {
+			
+				
+				// explicit wait - to wait for the compose button to be click-able
+		
+				
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='slds-icon-waffle']")));
+				//overridden method
+				driver.findElementByXPath("//div[@class='slds-icon-waffle']").click();
+				System.out.println("menu clicked ======>");
+				//selenium methods
+				//driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+				
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='View All']")));
+				driver.findElementByXPath("//button[text()='View All']").click();
+				System.out.println("View All clicked ======>");
+				
+				
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//p[text()='Sales']")));
+				driver.findElementByXPath("//p[text()='Sales']").click();
+				System.out.println("Sales clicked ======>");
+				
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@title='Opportunities']")));
+			
+				WebElement oppdpdwm = driver.findElementByXPath("//a[@title='Opportunities']");
+				JavascriptExecutor executor = (JavascriptExecutor) driver;
+				executor.executeScript("arguments[0].click();", oppdpdwm);
+				
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@title='New']")));
+				driver.findElementByXPath("//a[@title='New']").click();
+				Thread.sleep(2000);
+				
+				String input = "SRM Steels Opportunity by Anand";
+				WebElement oppName = driver.findElementByXPath("(//input[@class=' input'])[2]");
+				oppName.sendKeys("SRM Steels Opportunity by Anand");
+				
+			
+				driver.findElementByXPath("//a[@class='datePicker-openIcon display']").click();
+				Thread.sleep(1000);
+				driver.findElementByXPath("//button[text()='Today']").click();
+				
+				driver.findElementByXPath("//span[text()='Type']/following::div").click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='New Customer']")));
+				driver.findElementByXPath("//a[text()='New Customer']").click();
+				
+				
+				driver.findElementByXPath("//span[text()='Lead Source']/following::div").click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Partner Referral']")));
+				driver.findElementByXPath("//a[text()='Partner Referral']").click();
+				
+			
+				driver.findElementByXPath("//span[text()='Amount']/following::input").sendKeys("85000");
+				
+				
+				/*
+				 * driver.findElementByXPath("(//span[text()='Stage'])[2]/following::div").click
+				 * (); Thread.sleep(3000);
+				 * driver.findElementByXPath("//a[text()='Needs Analysis']").click();
+				 */
+				driver.findElementByXPath("(//span[text()='Stage'])[2]/following::div").click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Needs Analysis']")));
+				driver.findElementByXPath("//a[text()='Needs Analysis']").click();
+				
+				driver.findElementByXPath("//span[text()='Primary Campaign Source']/following::div").click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//div[@class='listContent']//ul/li/a)[1]")));
+				driver.findElementByXPath("(//div[@class='listContent']//ul/li/a)[1]").click();
+				
+				
+				driver.findElementByXPath("(//span[text()='Save'])[2]").click();
+				Thread.sleep(5000);
+				/*
+				 * wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+				 * "//a[@title='Opportunities']")));
+				 * driver.findElementByXPath("//a[@title='Opportunities']").click();
+				 */
+				 
+				WebElement oppdpdwm1 = driver.findElementByXPath("//a[@title='Opportunities']");
+				//JavascriptExecutor executor = (JavascriptExecutor) driver;
+				executor.executeScript("arguments[0].click();", oppdpdwm1);
+				
+				System.out.println("**********Opportunity  clicked after save ********");
+				
+				
+				//driver.navigate().refresh();
+				
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//table[@data-aura-class='uiVirtualDataTable']/tbody/tr/th/span/a)[1]")));
+				WebElement verifyOppName = driver.findElementByXPath(
+						"(//table[@data-aura-class='uiVirtualDataTable']/tbody/tr/th/span/a)[1]");
+				String vname = verifyOppName.getAttribute("title");
+				Thread.sleep(1000);
+				System.out.println("========" + vname);
+				System.out.println("=========>" + input);
+				if (input.equals(vname)) {
+					System.out.println("Opportunity Created Succeddfully");
+				} 
+			} 
+			catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			
+		} 
+	} 
+
+
+
+
+
