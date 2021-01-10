@@ -1,0 +1,121 @@
+package Week3Day2;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class NewDashboard extends BaseClass {
+
+	@Test
+	public void newDBoard() throws InterruptedException {
+
+		try {
+
+			// explicit wait - to wait for the compose button to be click-able
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='slds-icon-waffle']")));
+			// overridden method
+			driver.findElementByXPath("//div[@class='slds-icon-waffle']").click();
+			System.out.println("*****menu clicked*******");
+			// selenium methods
+			// driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='View All']")));
+			driver.findElementByXPath("//button[text()='View All']").click();
+			System.out.println("******View All clicked******");
+			Thread.sleep(2000);
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[text()='Service Console']")));
+			driver.findElementByXPath("//p[text()='Service Console']").click();
+			System.out.println("******Service console clicked******");
+
+			/*wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@title='Show Navigation Menu']/lightning-primitive-icon")));
+			driver.findElementByXPath("//button[@title='Show Navigation Menu']/lightning-primitive-icon").click();
+			System.out.println("******dropdown clicked******");
+			Thread.sleep(8000);*/
+
+
+			WebElement oppdpdwm = driver.
+					findElementByXPath("//button[@title='Show Navigation Menu']/lightning-primitive-icon"); 
+			JavascriptExecutor executor = (JavascriptExecutor) driver;
+			executor.executeScript("arguments[0].click();", oppdpdwm);
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Home']")));
+			driver.findElementByXPath("//span[text()='Home']").click();
+			Thread.sleep(2000);
+
+			//Step : 6
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[@data-aura-class='uiOutputText'])[2]")));
+			String closedval = driver.findElementByXPath("(//span[@data-aura-class='uiOutputText'])[2]").getText().replaceAll("\\D","");
+
+			System.out.println("**closedval: "+closedval);
+			int closedvalint = Integer.parseInt(closedval);
+
+			String openVal = driver.findElementByXPath("(//span[@data-aura-class='uiOutputText'])[3]").getText().replaceAll("\\D","");
+			System.out.println("Open Val :" +openVal);
+
+			int openValint = Integer.parseInt(openVal);
+
+			int totVal = closedvalint + openValint;
+
+			if(totVal < 10000 ) {
+
+				driver.findElementByXPath("//button[@title='Edit Goal']").click();
+
+				//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@aria-describedby='currencyCode']")));
+				driver.findElementByXPath("//input[@aria-describedby='currencyCode']").sendKeys("10000");
+				driver.findElementByXPath("//span[text()='Save']").click();
+
+			}
+
+
+
+			//step : 7
+			WebElement oppdpdwm1 = driver.
+					findElementByXPath("//button[@title='Show Navigation Menu']/lightning-primitive-icon"); 
+			executor.executeScript("arguments[0].click();", oppdpdwm1);
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Dashboards']")));
+			driver.findElementByXPath("//span[text()='Dashboards']").click();
+			Thread.sleep(2000);
+			
+			//step :8
+			driver.findElementByXPath("//div[text()='New Dashboard']").click();
+			
+			//step 9:
+			
+			WebElement dashborardiframe = driver.findElementByXPath("//iframe[@title='dashboard']");
+			driver.switchTo().frame(dashborardiframe);
+			
+			
+			System.out.println("========inside dashboard============");
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("dashboardNameInput")));
+			driver.findElementById("dashboardNameInput").sendKeys("Roopa_WorkOut");
+			
+			//step 10:
+				driver.findElementByXPath("//input[@id='dashboardDescriptionInput']").sendKeys("Testing");
+				
+				driver.findElementByXPath("//button[text()='Create']").click();
+				
+			//step:11
+				String verifyDBCreation = driver.findElementByXPath("//span[@class='title slds-truncate']").getText();
+				System.out.println("****verifyDBCreation***"+verifyDBCreation);
+
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+}
