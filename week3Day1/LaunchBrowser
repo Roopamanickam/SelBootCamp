@@ -1,0 +1,79 @@
+package week3Day1;
+
+import java.util.concurrent.TimeUnit;
+
+import org.junit.BeforeClass;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class LaunchBrowser {
+
+	public static RemoteWebDriver driver;
+	public static WebDriverWait wait;
+
+	@Parameters({"browser","username","password","url"})
+	
+	@BeforeMethod
+	public void loadBrowser(String browser, String uname, String pwd, String url ) throws InterruptedException {
+		 
+		System.out.println("***** Running Browser is "+browser +"******");
+
+		if (browser.equals("chrome")) {
+			WebDriverManager.chromedriver().setup();
+			//to disable notification
+			ChromeOptions ops =  new  ChromeOptions();
+			ops.addArguments("--disable-notifications");
+			 driver = new ChromeDriver(ops);
+		}else if (browser.equals("firefox")) {
+			WebDriverManager.firefoxdriver().setup();
+			//to disable notification
+			driver = new FirefoxDriver();
+		}else if(browser.equals("safari")) {
+			driver= new SafariDriver();
+		}else if(browser.equals("ie")) {
+			driver = new InternetExplorerDriver();
+		}
+
+		System.out.println("***** username  is "+uname +"******");		
+		System.out.println("***** username  is "+pwd +"******");	
+
+		driver.get(url);
+		
+		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); 
+		
+		wait = new WebDriverWait(driver,30);
+		
+		driver.findElementById("username").sendKeys(uname);
+
+		driver.findElementById("password").sendKeys(pwd);
+
+		driver.findElementById("Login").click();
+		Thread.sleep(10000);
+
+		System.out.println("login success");
+		// explicit wait - to wait for the compose button to be click-able
+	
+		
+	} 
+
+
+	@AfterMethod
+	public void closeBrowser() {
+		//driver.close();
+	}
+
+}
