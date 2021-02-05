@@ -1,0 +1,28 @@
+package testcases;
+
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import base.ProjectSpecificMethods;
+import pages.LoginPage;
+
+public class LoginLogout extends ProjectSpecificMethods{
+	
+	@BeforeTest
+	public void setFile() {
+		excelFileName ="LoginCreds";
+	}
+	
+	@Test(dataProvider="fetchData")
+	public void loginTest(String username, String password) throws InterruptedException {
+		//LoginPage lp = new LoginPage();
+		
+		new LoginPage(driver)
+		.enterUsername(username)
+		.enterPassword(password)
+		.clickLoginButton()
+		.viewProfile();
+		//.logout();
+		
+	}
+}
