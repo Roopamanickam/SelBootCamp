@@ -1,0 +1,32 @@
+package pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import base.ProjectSpecificMethods;
+
+public class LoginPage extends ProjectSpecificMethods{
+	
+	public  LoginPage(ChromeDriver driver) {
+	this.driver = driver;	
+	}
+
+	public LoginPage enterUsername(String username) {
+		WebElement eleUname = driver.findElementById("username");
+		EnterData(eleUname,username);
+		//driver.findElementById("username").sendKeys(username);
+		return this;
+	}
+	
+	public LoginPage enterPassword(String password) {
+		driver.findElementById("password").sendKeys(password);
+		return this;
+	}
+	
+	public LandingPage clickLoginButton(){
+		WebElement clk = driver.findElementById("Login");
+		clickElement(clk);
+		//driver.findElementById("Login").click();
+		return new LandingPage(driver);
+	}
+}
