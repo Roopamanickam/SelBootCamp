@@ -29,8 +29,8 @@ public class DeleteOpportunity extends ProjectSpecificMethods {
 		.clkDdSearchResultForDelete()
 		.clkDeleteOpp()
 		.clkOKDelete()
-		.confirmDelete(oppName);
-		//.getID();
+		.confirmDelete(oppName)
+		.getID();
 		
 
 	}
