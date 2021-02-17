@@ -7,12 +7,11 @@ package runner;
 import pages.ParentClass;
 
 	@CucumberOptions(features="src/main/resources/features", 
-					glue="src/main/java/pages", 
-					monochrome= true,
-					snippets = SnippetType.CAMELCASE
+					glue="pages", 
+					monochrome= true
 					)
 
-	public class RunLoginReport extends ParentClass {
+	public class RunLoginReport extends AbstractTestNGCucumberTests {
 
 	}
 	
