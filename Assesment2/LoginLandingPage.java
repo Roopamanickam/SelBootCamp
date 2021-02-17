@@ -149,23 +149,24 @@ public class LoginLandingPage extends ParentClass{
 					 Date rawstartDate = new Date(new Date().getTime() + (5*24*60*60*1000));
 					 
 					 // Now format the date
-					 String startDate = dateFormat.format(rawstartDate);
-					 String[] spltDate = startDate.split("/");
+					 String toDate = dateFormat.format(rawstartDate);
+					 driver.findElementByXPath("//input[@name='endDate']").sendKeys(toDate);
 					 
-					 System.out.println("@@@@@@@@@@@@@  "+startDate);	
+					/* String[] spltDate = toDate.split("/");
+					 
+					 System.out.println("@@@@@@@@@@@@@  "+toDate);	
 					 System.out.println("***"+spltDate[1]);
 										 
-					 String datXpath="//a[@class='x-date-date']//span[text()='"+startDate+"']";
+					 String datXpath="//a[@class='x-date-date']//span[text()='"+toDate+"']";
 					 
 					 System.out.println("========"+datXpath);
 					
 					 WebElement strtDateClk = driver.findElement(By.xpath(datXpath));
-					 strtDateClk.click();	         
+					 strtDateClk.click();	 */        
 				    
 	}
 
-	
-	@When("Click Preview as Tabular Format")
+	@When("verify Preview in Tabular Format")
 	public void clickPreviewAsTabularFormat() {
 	WebElement tabFormat = driver.findElementByXPath("//table[@id='reportFormatMink']//button");
 	String tabFormatTxt = tabFormat.getText();
@@ -174,6 +175,7 @@ public class LoginLandingPage extends ParentClass{
 	 		   System.out.println("Tabular format success");
 	 	   }
 	}
+	
 	/*
 	@When("Get the List of Billing State\\/Province")
 	public void getTheListOfBillingStateProvince() {
