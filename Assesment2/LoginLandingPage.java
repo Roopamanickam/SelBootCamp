@@ -7,12 +7,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import cucumber.api.java.en.And;
@@ -21,6 +25,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class LoginLandingPage extends ParentClass{
+	public String listOfcpyAcName,nameToVerify,OutputRptName;
 
 	@Given("Enter the username (.*)")
 	public void enterUsername(String username) {
@@ -90,7 +95,7 @@ public class LoginLandingPage extends ParentClass{
 		WebElement leadRpt  = driver.findElementByXPath("//form[@id='thePage:dummyForm']/table//td[2]/div[@class='previewBlock']");
 	
 		System.out.println("inside Leads img display block");
-		//img[@src=/img/rptleadlist.gif]
+		
 				if(leadRpt.isDisplayed()) {
 					boolean leadRptVerify = true;
 					System.out.println("Lead Report Image is displayed");
@@ -119,10 +124,6 @@ public class LoginLandingPage extends ParentClass{
 	WebElement rangeClk = driver.findElementByXPath("(//table[@class='x-table-layout'])[3]//tr[2]/td[2]//div/form//input[@name='duration']");
 	rangeClk.click();
 	Thread.sleep(3000);
-	/*JavascriptExecutor executor = (JavascriptExecutor)driver;
-	executor.executeScript("arguments[0].click();", rangeClk);*/
-	System.out.println("All dropdown clicked");
-	//rangeClk.click();
 	driver.findElementByXPath("//div[@class='x-combo-list-inner']/div[text()='All Time']").click();
 	System.out.println("All Time clicked");	    
 	}
@@ -138,7 +139,7 @@ public class LoginLandingPage extends ParentClass{
 	@When("Select ToDate as PlusFive days From Today")
 	public void selectToDateAsPlusDaysFromToday() throws InterruptedException {
 	//TO choose tmrw's date as StartDate
-		 	//driver.findElementByXPath("((//table[@class='x-table-layout'])[3]//tr[2]/td[2]//div/form//img[@class='x-form-trigger x-form-date-trigger'])[2]").click();
+		 	
 		driver.findElementByXPath("//input[@name='endDate']/following-sibling::img[@class='x-form-trigger x-form-date-trigger']").click();
 		System.out.println("==========Date dropdown Clicked=======");
 		 	Thread.sleep(3000);
@@ -150,20 +151,9 @@ public class LoginLandingPage extends ParentClass{
 					 
 					 // Now format the date
 					 String toDate = dateFormat.format(rawstartDate);
-					 driver.findElementByXPath("//input[@name='endDate']").sendKeys(toDate);
-					 
-					/* String[] spltDate = toDate.split("/");
-					 
-					 System.out.println("@@@@@@@@@@@@@  "+toDate);	
-					 System.out.println("***"+spltDate[1]);
-										 
-					 String datXpath="//a[@class='x-date-date']//span[text()='"+toDate+"']";
-					 
-					 System.out.println("========"+datXpath);
-					
-					 WebElement strtDateClk = driver.findElement(By.xpath(datXpath));
-					 strtDateClk.click();	 */        
-				    
+					 WebElement toDateWE = driver.findElementByXPath("//input[@name='endDate']");
+					 toDateWE.sendKeys(toDate);
+					 toDateWE.click();
 	}
 
 	@When("verify Preview in Tabular Format")
@@ -176,22 +166,146 @@ public class LoginLandingPage extends ParentClass{
 	 	   }
 	}
 	
-	/*
-	@When("Get the List of Billing State\\/Province")
+	@When("Get the List of Billing StateProvince")
 	public void getTheListOfBillingStateProvince() {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new cucumber.api.PendingException();
+		List<WebElement> elerowCount = driver.findElements(By.xpath("//div[@class='x-grid3-body']/div"));
+		int rowCount= elerowCount.size();
+				System.out.println("row count*******"+rowCount);
+				
+				for (int i = 1; i <= rowCount; i++) {
+					
+					List<WebElement> elecpyActNameLst = driver.findElementsByXPath("(//div[@class='x-grid3-body']/div)["+i+"]//td[5]/div");
+					
+					List<String> lstActName = new ArrayList<String>();
+					for (WebElement ele :elecpyActNameLst) {
+						String extAccName = ele.getText();
+						lstActName.add(extAccName);						
+					}
+					
+					System.out.println("***"+lstActName.toString());
+				}
+				
+	   
 	}
 
 	@When("Get the Grand Total of Records Available")
 	public void getTheGrandTotalOfRecordsAvailable() {
-	 
+	 WebElement grandTotWE = driver.findElementByXPath("(//div[@class='x-grid3-cell-inner'])[1]/b");
+	 String grandTot = grandTotWE.getText();
+	 System.out.println("***"+grandTot);
+	}
+	
+	@Then("Click on Save")
+	public void clkSave() {
+		driver.findElementByXPath("//button[text()='Save']").click();
+		System.out.println("Save Clicked");
 	}
 
-	@Then("Click on Save")
-	public void clickOnSave() {
+	@Then("Enter Report name as (.*)")
+	public void enterReportNameAsYourName(String name) {
+		driver.findElementByXPath("//input[@name='reportName']").sendKeys(name);
+		nameToVerify=name;
+		System.out.println("nameToVerify is:"+nameToVerify);
+	}
+
+	@Then("Enter Report Unique name as (.*)")
+	public void enterReportUniqueNameAsYourName_anyNumber(String uniqueName) {
+		driver.findElementByXPath("//input[@name='reportDevName']").sendKeys(uniqueName);
+	}
+
+	@Then("Enter Report Description as Report Updated by (.*)")
+	public void enterReportDiscussionAsReportUpdatedByYourName(String desc) {
+	   driver.findElementByXPath("//textarea[@name='reportDescription']").sendKeys(desc);
+	}
+
+	@Then("Select Report Folder as Unfiled Public Reports")
+	public void selectReportFolderAsUnfiledPublicReports() {
+	    driver.findElementByXPath("(//img[@class='x-form-trigger x-form-arrow-trigger'])[4]").click();
+	    driver.findElementByXPath("//div[text()='Unfiled Public Reports']").click();
+	}
+
+	@And("Click Save")
+	public void save() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.findElementByXPath("//button[text()='Cancel']/preceding::button[text()='Save'][1]").click();
+		Thread.sleep(4000);
+		driver.switchTo().defaultContent();
+	}
+	
+	@Then("Verify Report has been created successfully as (.*)")
+	public void verifyReportCreation(String reportName) {
+		WebElement verifyRptIframe = driver.findElementByXPath("//iframe[starts-with(@title,'"+reportName+"')]");
+		driver.switchTo().frame(verifyRptIframe);
+		WebElement reportTxtWE = driver.findElementByXPath("//h2[@class='pageDescription']");
+		String reportTxt = reportTxtWE.getText();
+				
+		System.out.println("****Created Lead NAme:"+reportTxt);
+	if(reportTxt.contentEquals(reportName)) {
+		System.out.println("Report has been created successfully");
+		}
+	driver.switchTo().defaultContent();
+	}
+	
+	@When("Click on Run Report (.*)")
+	public void clickRunReport(String reportName) throws InterruptedException {
+		WebElement verifyRptIframe = driver.findElementByXPath("//iframe[starts-with(@title,'"+reportName+"')]");
+		driver.switchTo().frame(verifyRptIframe);
+		driver.findElementByXPath("//title[text()='"+reportName+" ~ Salesforce - Developer Edition']//following::table[@id='runReportBtn']/tbody").click();
+	    Thread.sleep(3000);
+	    driver.switchTo().defaultContent();
+	}
+
+	@When("Get the total Number of Records")
+	public void totalNumberOfRecords() {
+		WebElement totRecIframe = driver.findElementByXPath("//iframe[@title='Report Viewer']");
+		driver.switchTo().frame(totRecIframe);
+	    String totRec = driver.findElementByXPath("//div[@class='metricsElement metricsValue']").getText();
+	    System.out.println("======"+totRec);
 	    
 	}
-	*/
-	
+
+	@And("Click on Edit")
+	public void clickEdit() {
+	    driver.findElementByXPath("//div[@class='slds-dropdown-trigger slds-dropdown-trigger_click slds-button_last']").click();
+	    driver.findElementByXPath("//span[@title='Edit (Salesforce Classic)']").click();
+	    driver.switchTo().defaultContent();
+	}
+
+	@And("Click on Close (.*)")
+	public void clickClose(String reportName ) throws InterruptedException {
+		WebElement closeIframe = driver.findElementByXPath("//iframe[starts-with(@title,'"+reportName+"')]");
+		driver.switchTo().frame(closeIframe);
+		driver.findElementByXPath("//button[text()='Close']").click();
+		
+		driver.findElementByXPath("//button[text()='Save & Close']").click();
+		Thread.sleep(3000);
+		
+
 }
+	
+	@And("Get the text of Report Name")
+	public void reportNameTxt() {
+		driver.switchTo().defaultContent();
+		
+		WebElement trow = driver.findElementByXPath("//table[@class='slds-table slds-table_header-fixed slds-table_bordered slds-table_edit slds-table_resizable-cols']/tbody/tr[1]/th//a");
+		OutputRptName = trow.getAttribute("title");
+		System.out.println("*The saved Report Name:"+OutputRptName);
+		
+	}
+
+	@And("Verify the Report Name (.*)")
+	public void verifyTheReportName(String RptName) {
+	   if(OutputRptName.contentEquals(RptName)) {
+		   System.out.println(RptName+": Report created sucessfully");
+	   }
+	}
+
+	@Then("Get the Date and Time When the Report is Created On")
+	public void getTheDateAndTimeWhenTheReportIsCreatedOn() {
+	    String dateTime = driver.findElementByXPath("//table[@class='slds-table slds-table_header-fixed slds-table_bordered slds-table_edit slds-table_resizable-cols']/tbody/tr[1]/td[@data-label='Created On']").getText();
+	    System.out.println("Report Created Date and Time: "+dateTime);
+	}
+	
+	}
+
+
