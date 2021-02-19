@@ -29,6 +29,6 @@ public class Hooks extends ParentClass{
 
 	@After
 	public void closeBrowser() {
-	//driver.close();
+	driver.close();
 	}
 }
