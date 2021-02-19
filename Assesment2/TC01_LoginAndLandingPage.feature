@@ -15,13 +15,27 @@ Then Lead Report Image should be displayed
 When Download the LeadReport
 And Click Create button
 And Select Range as All Time
-And Select From date as todays date 
+#And Select From date as todays date 
 And Select ToDate as PlusFive days From Today
-#And Click Preview as Tabular Format
-#And Get the List of Billing State/Province
-#And Get the Grand Total of Records Available
-#Then Click on Save 
+And verify Preview in Tabular Format
+And Get the List of Billing StateProvince
+And Get the Grand Total of Records Available 
+Then Click on Save 
+And Enter Report name as <ReportName>
+And Enter Report Unique name as <ReportUniqueName>  
+And Enter Report Description as Report Updated by <Desc>
+And Select Report Folder as Unfiled Public Reports
+And Click Save  
+Then Verify Report has been created successfully as <ReportName>
+When Click on Run Report <ReportName>
+And Get the total Number of Records
+And Click on Edit 
+And Click on Close <ReportName>
+And Get the text of Report Name 
+And Verify the Report Name <ReportName> 
+And Get the Date and Time When the Report is Created On
+   
  
 Examples:
-|LoginName|Password|
-|hari.radhakrishnan@testleaf.com|Newyorkcity@911|
+|LoginName|Password|ReportName|ReportUniqueName|Desc|
+|hari.radhakrishnan@testleaf.com|Newyorkcity@911|Roopa|Roopa_2555|Roopa Desc|
